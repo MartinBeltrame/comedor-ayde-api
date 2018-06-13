@@ -9,46 +9,34 @@ class Email extends CI_Model
 
     public function send_email($users_emails, $message)
     {
-        $this->ci_email->from('sergio-ayde@googlegroups.com', 'AyDE Solutions', 'guillermo.arispe@gmail.com');
-        $this->ci_email->to($users_emails);
-        $this->ci_email->subject("Comedor");
-        $this->ci_email->set_mailtype('html');
-        $this->ci_email->message($message);
+        $this->reset_confirmed_users();
 
-        // $email_params = array(
-        //     'user' => $user_email,
-        //     'message' => $message,
-        // );
-
-        // $body = $this->load->view('emails/confirmation', $email_params, true);
-        // $this->ci_email->message($body);
-
-        if (!$this->ci_email->send()) {
-            return false;
-        }
-
-        return true;
-        /*
         foreach ($users_emails as $user_email) {
 
-            $this->ci_email->clear();
-
-            $this->ci_email->from('sergio-ayde@googlegroups.com', 'AyDE Solutions', 'guillermo.arispe@gmail.com');
+            $this->ci_email->from('sergio-ayde@googlegroups.com', 'AyDE Solutions');
             $this->ci_email->to($user_email);
-            $this->ci_email->subject("Comedor");
+            $this->ci_email->subject("Menú del día");
             $this->ci_email->set_mailtype('html');
-            $this->ci_email->message($message);
 
-            // $email_params = array(
-            //     'user' => $user_email,
-            //     'message' => $message,
-            // );
+            $to = strrpos($user_email, "@");
+            $username = substr($user_email, 0, $to);
+            $url = "http://belarisdev.com/ayde/api/index.php/users/" . $username;
 
-            // $body = $this->load->view('emails/confirmation', $email_params, true);
-            // $this->ci_email->message($body);
+            $email_params = array(
+                'confirmation_url' => $url,
+                'message' => $message,
+            );
+
+            $body = $this->load->view('emails/confirmation', $email_params, true);
+            $this->ci_email->message($body);
 
             $this->ci_email->send();
         }
-        */
+    }
+
+    private function reset_confirmed_users()
+    {
+        $this->db->set('confirmed', false);
+        $this->db->update('User');
     }
 }

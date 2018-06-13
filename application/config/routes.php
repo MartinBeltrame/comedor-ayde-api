@@ -6,3 +6,7 @@ $route['404_override'] = '';
 $route['translate_uri_dashes'] = FALSE;
 
 $route['emails']['POST'] = 'emails';
+
+$route['users/(:any)']['GET'] = 'users/confirm/$1';
+$route['users']['POST'] = 'users/register';
+$route['users']['GET'] = 'users';

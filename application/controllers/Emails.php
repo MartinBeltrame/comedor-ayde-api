@@ -17,11 +17,6 @@ class Emails extends CI_Controller
     {
         $body = $this->json_decoder->decode_JSON();
         $email_was_sent = $this->email->send_email($body->emails, $body->message);
-
-        if ($email_was_sent) {
-            $this->response_manager->response200();
-        } else {
-            $this->response_manager->response500("Ocurrió un error.");
-        }
+        $this->response_manager->response200();
     }
 }
