@@ -15,8 +15,8 @@ class Users extends CI_Controller
 
     public function index()
     {
-        $confirmed_users = $this->user->get_confirmed_users();
-        $this->response_manager->response200JSON($confirmed_users);
+        $users = $this->user->get_all();
+        $this->response_manager->response200JSON($users);
     }
 
     public function register()
@@ -29,11 +29,7 @@ class Users extends CI_Controller
     {
         $user_was_confirmed = $this->user->confirm($username);
         if ($user_was_confirmed) {
-            $this->response_manager->response200();
-            // $this->view->load('confirmation_view');
-        } else {
-            $this->response_manager->response500('Ocurrió un error al confirmar el usuario.');
-            // $this->view->load('confirmation_error_view');
+            $this->load->view('user_confirmed');
         }
     }
 }

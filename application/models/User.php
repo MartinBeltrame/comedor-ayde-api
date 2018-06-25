@@ -6,11 +6,10 @@ class User extends CI_Model
         $this->load->database();
     }
 
-    public function get_confirmed_users()
+    public function get_all()
     {
-        $this->db->where('confirmed', true);
-        $confirmed_users = $this->db->get('User')->result();
-        return $confirmed_users;
+        $users = $this->db->get('User')->result();
+        return $users;
     }
 
     public function register($user)
@@ -18,6 +17,7 @@ class User extends CI_Model
         $to = strrpos($user->email, "@");
         $username = substr($user->email, 0, $to);
         $new_user = array(
+            'name' => $user->name,
             'username' => $username,
             'email' => $user->email,
             'confirmed' => false,
